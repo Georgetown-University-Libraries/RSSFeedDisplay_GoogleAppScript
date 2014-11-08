@@ -2,7 +2,7 @@ Sample Web App: https://script.google.com/macros/s/AKfycbzRYIZ1bIOhXyCdZhnmkLnlE
 
 License Information Below
 
-Copyright (c) 2013, Georgetown University Libraries All rights reserved.
+Copyright (c) 2014, Georgetown University Libraries All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
