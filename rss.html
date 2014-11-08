@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta charset="UTF-8"/>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+<style type="text/css">
+  body {
+    background-color: #04254b; 
+    color: white; 
+    background-image: url('https://gucms-ui.georgetown.edu/www/m/titles/logo-home.gif'); 
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+	font-family: Calibri, Arial;
+  }
+  div.item {min-height: 300px;}
+  span.feed {display: block;text-align: right;font-size: 20px;}
+  #end {min-height: 1000px;}
+  //div.hide {display:none;}
+  //div.pending {position:absolute; top: 50%;}
+  h2 {
+    margin: 20px; 
+    padding: 20px;
+    color: #04254b; 
+    background-color: rgba(202, 193, 174, 0.8);
+    border: thin solid #f0fbff;
+    text-transform: uppercase;
+    font-size: 40px;
+  }
+  h2.c1 {background-color: orange;}
+  h2.c2 {background-color: green;}
+  h2.c3 {background-color: purple;}
+  div.item div {margin: 20px; font-size: 30px;}
+</style>
+<script>
+  var FEEDS = {
+    hoya : "http://www.thehoya.com/se/the-hoya-rss-1.1831050?detailRSS=true",
+    gu : "http://www.georgetown.edu/rss/index.rss",
+    wapol : "http://feeds.washingtonpost.com/rss/local",
+    wapow : "http://feeds.washingtonpost.com/rss/world",
+    guvoice : "http://georgetownvoice.com/feed/",
+  };
+ 
+  var CONFIG = {
+    iclass : ["call"],
+    time_reload : 30 * 60 * 1000,
+    LEN : 300,
+    MAXAGE : 7, //publish no items older than this number of days
+    MAXITEM : 10, //maximum items from a single feed
+    INTV : 10,
+    PIX : 1,
+  };
+
+  $(document).ready(function(){
+    initContent();
+    getMoreContent();
+    setInterval( function(){getMoreContent()}, CONFIG.time_reload );
+    startScroll();
+    $("img.logo").css("position", "fixed");
+  });
+
+function startScroll() {
+  setTimeout(function(){scroll(0);}, CONFIG.INTV);
+}
+
+function scroll(top) {
+  top = top + CONFIG.PIX;
+  if (top > $("#foo").height() + 10 - 1000) top = 0;
+  $("#foo").css("margin-top", -top + "px");
+  setTimeout(function(){scroll(top);}, CONFIG.INTV);  
+}
+
+
+var foo=0;
+function getMoreContent() {
+  for(var f in FEEDS){
+    google.script.run.withSuccessHandler(addItems).getFeed(f, FEEDS[f], CONFIG.MAXITEM, CONFIG.MAXAGE, CONFIG.LEN);
+  }
+}
+
+function initContent() {
+  $("#foo2").html("");
+  for(var f in FEEDS){
+    $("#foo2").append('<div class="'+f+'"></div>');
+  }  
+}
+
+function addItems(res) {
+  var html = "<div id='"+res.f+"'>";
+  for(var i=0; i<res.items.length; i++){
+    html += res.items[i];
+  }
+  html += "</div>";
+  $(document).find("div."+res.f).replaceWith(html);
+}
+
+
+</script>
+</head>
+<body>
+<div id="foo">
+<em>Please wait a moment for the content to load...</em>
+<div id="foo2"/>
+<div id="end">&#160;</div>
+</div>
+</body>
+</html>
+
+
+
